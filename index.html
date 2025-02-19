@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Validation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+
+    input {
+      display: block;
+      margin-bottom: 10px;
+      padding: 8px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <h2>Register</h2>
+  <form id="myForm">
+    <input type="text" id="name" placeholder="Full Name">
+    <span id="nameError" class="error"></span>
+
+    <input type="email" id="email" placeholder="Email">
+    <span id="emailError" class="error"></span>
+
+    <input type="password" id="password" placeholder="Password">
+    <span id="passwordError" class="error"></span>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    document.getElementById("myForm").addEventListener("submit", function (event) {
+      event.preventDefault()
+      let isValid = true
+      let name = document.getElementById("name").value.trim()
+      let email = document.getElementById("email").value.trim()
+      let password = document.getElementById("password").value.trim()
+      // let regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      let isValidName = name.length > 2;
+      let isValidEmail = email.length > 10;
+      let isValidPassword = password.length > 8
+
+      console.log(name.length);
+
+      if (name.length < 2) {
+        document.getElementById("nameError").innerText = "please enter your full name";
+        isValid = false;
+      } else {
+        document.getElementById("nameError").innerText = "";
+
+      }
+
+      // if (isValidEmail == false || isValidName == false || isValidPassword == false) {
+      //   isValid = false
+      // }
+      console.log(isValid);
+      if (isValid) {
+        alert("Form submitted successfully!");
+        this.submit(); // Uncomment to actually submit the form
+      }
+    })
+
+    const multiply = (a,b) => a*b
+    console.log(multiply(2,3));
+
+    // consume API with asyn and await 
+    const getUsers = async () =>{
+        let response = await fetch("https://jsonplaceholder.typicode.com/users");
+       
+
+        let data = await response.json();
+        console.log(data);
+        };
+</script>
+
+</body>
