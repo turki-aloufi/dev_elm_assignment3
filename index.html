@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Validation</title>
+  <title>Enhanced Form Validation</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -22,8 +21,11 @@
       margin-bottom: 10px;
       padding: 8px;
     }
-  </style>
 
+    #userList {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
@@ -42,50 +44,42 @@
     <button type="submit">Submit</button>
   </form>
 
+  <button id="fetchUsers">Fetch Users</button>
+  <ul id="userList"></ul>
+
   <script>
     document.getElementById("myForm").addEventListener("submit", function (event) {
-      event.preventDefault()
-      let isValid = true
-      let name = document.getElementById("name").value.trim()
-      let email = document.getElementById("email").value.trim()
-      let password = document.getElementById("password").value.trim()
-      // let regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      event.preventDefault();
+      let isValid = true;
 
-      let isValidName = name.length > 2;
-      let isValidEmail = email.length > 10;
-      let isValidPassword = password.length > 8
+      let name = document.getElementById("name").value.trim();
+      let email = document.getElementById("email").value.trim();
+      let password = document.getElementById("password").value.trim();
 
-      console.log(name.length);
+      let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
-      if (name.length < 2) {
-        document.getElementById("nameError").innerText = "please enter your full name";
-        isValid = false;
-      } else {
-        document.getElementById("nameError").innerText = "";
+      document.getElementById("nameError").innerText = name ? "" : "Please enter your full name";
+      document.getElementById("emailError").innerText = email ? (emailRegex.test(email) ? "" : "Invalid email format") : "Please enter your email";
+      document.getElementById("passwordError").innerText = password ? (passwordRegex.test(password) ? "" : "Password must be 8+ characters, include uppercase, lowercase, number, and special character") : "Please enter a password";
 
-      }
+      isValid = name && emailRegex.test(email) && passwordRegex.test(password);
 
-      // if (isValidEmail == false || isValidName == false || isValidPassword == false) {
-      //   isValid = false
-      // }
-      console.log(isValid);
       if (isValid) {
         alert("Form submitted successfully!");
-        this.submit(); // Uncomment to actually submit the form
+        this.submit();
       }
-    })
+    });
 
-    const multiply = (a,b) => a*b
-    console.log(multiply(2,3));
-
-    // consume API with asyn and await 
-    const getUsers = async () =>{
-        let response = await fetch("https://jsonplaceholder.typicode.com/users");
-       
-
-        let data = await response.json();
-        console.log(data);
-        };
-</script>
+    document.getElementById("fetchUsers").addEventListener("click", async function () {
+      let response = await fetch("https://jsonplaceholder.typicode.com/users");
+      let users = await response.json();
+      console.log(users);
+      let userList = document.getElementById("userList");
+      userList.innerHTML = users.map(user => `<li>${user.name} - ${user.email}</li>`);
+    });
+  </script>
 
 </body>
+
+</html>
